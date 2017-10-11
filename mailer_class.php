@@ -4,9 +4,12 @@
 
 
 class mailer_class {
-  private $charset;
   private $db = false; // Database object
   private $fh = false; // File_handler object
+  public $from_email = 'mailer_class@example.com';
+  public $from_name = 'John';
+  public $content_type = 'text/html';
+  public $charset = 'UTF-8';
   
   public function __construct($db=false, $fh=false) {
 	if ($db != false) {
@@ -17,20 +20,20 @@ class mailer_class {
 	  // Use external file handler object if available, otherwise use basic file handling
 	  $this->fh = $fh;
 	}
-	// Settings
-    $this->charset = 'UTF-8';
   }
-  public function send_email() {
-	$to = 'johny@example.com, sally@example.com';
+  public function send_email($msg_subject='N/A', $msg_body='', $recipients) {
+      
+    $from = $this->from_name.'<'.$this->from_email.'>';
+    $to = $this->comma_this_shit($recipients);
 
-	$subject = '';
-	$message = ''; // text/html source
+    $subject = $msg_subject;
+	$message = $msg_body; // text/html source
 
     $headers = array();	
 	$headers[] = 'MIME-Version: 1.0';
-	$headers[] = 'Content-type: text/html; charset=' . $this->charset;
-	$headers[] = 'To: '; // Comma seperated, same order as in recipients ($to)
-	$headers[] = 'From: ';
+	$headers[] = 'Content-type: '.$content_type.'; charset=' . $this->charset;
+	$headers[] = 'To: ' . $to; // Comma seperated list of names and emails I.e. John <john@example.com>, smith <smith@example.com>
+	$headers[] = 'From: ' . $from;
 	// $headers[] = 'Cc: ';
 	// $headers[] = 'Bcc: ';
 
@@ -41,6 +44,13 @@ class mailer_class {
   }
   public function list_unsubscribe($list_id) {
 	  
+  }
+  private function comma_this_shit($input_array) {
+      $comma_seperated = '';
+      foreach ($input_array as &$value) {
+          $comma_seperated .= $value[0] . '<'. $value[1].'>,';
+      }
+      return rtrim($comma_seperated, ",");
   }
 
 }
