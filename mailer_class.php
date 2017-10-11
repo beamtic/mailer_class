@@ -31,7 +31,7 @@ class mailer_class {
 
     $headers = array();	
 	$headers[] = 'MIME-Version: 1.0';
-	$headers[] = 'Content-type: '.$content_type.'; charset=' . $this->charset;
+	$headers[] = 'Content-type: '.$this->content_type.'; charset=' . $this->charset;
 	$headers[] = 'To: ' . $to; // Comma seperated list of names and emails I.e. John <john@example.com>, smith <smith@example.com>
 	$headers[] = 'From: ' . $from;
 	// $headers[] = 'Cc: ';
@@ -47,10 +47,10 @@ class mailer_class {
   }
   private function comma_this_shit($input_array) {
       $comma_seperated = '';
-      foreach ($input_array as &$value) {
-          $comma_seperated .= $value[0] . '<'. $value[1].'>,';
+      foreach ($input_array as $key => $value) {
+          $comma_seperated .= $key . ' <'. $value.'>, ';
       }
-      return rtrim($comma_seperated, ",");
+      return rtrim($comma_seperated, ", ");
   }
 
 }
